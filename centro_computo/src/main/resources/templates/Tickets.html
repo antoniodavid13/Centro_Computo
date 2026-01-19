@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Tickets - TecnoSolutions</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <link rel="stylesheet" th:href="@{/tickets.css}">
+</head>
+<body class="dashboard-body">
+
+<nav class="navbar">
+    <div class="nav-brand">🖥️ TecnoSolutions</div>
+    <div class="nav-menu">
+        <a th:href="@{/monitoreo}" class="nav-link active">📊 Monitoreo</a>
+        <a th:href="@{/process-management}" class="nav-link">⚙️ Gestión de Procesos</a>
+        <a th:href="@{/backups}" class="nav-link">💾 Backups</a>
+        <a th:href="@{/database}" class="nav-link active">🗄️ Base de Datos</a>
+        <a th:href="@{/tickets}" class="nav-link active"> 🎫Tickets</a>
+        <a th:href="@{/logout}" class="nav-link logout">🚪 Cerrar Sesión</a>
+    </div>
+</nav>
+
+<div class="container dashboard-content">
+    <h2 class="welcome-header">🎫 Sistema de Tickets de Soporte</h2>
+
+    <!-- Alertas -->
+    <div id="alertsContainer"></div>
+
+    <!-- Estadísticas - ADMIN y TECNICO -->
+    <section class="monitoring-section" th:if="${userSession.isAdmin() or userSession.isTechnician()}">
+        <h3>📊 Resumen de Tickets</h3>
+        <div class="stats-grid" id="statsContainer">
+            <div class="stat-card stat-total">
+                <div class="stat-icon">📋</div>
+                <div class="stat-info">
+                    <span class="stat-value" id="statTotal">-</span>
+                    <span class="stat-label">Total</span>
+                </div>
+            </div>
+            <div class="stat-card stat-open">
+                <div class="stat-icon">🔵</div>
+                <div class="stat-info">
+                    <span class="stat-value" id="statOpen">-</span>
+                    <span class="stat-label">Abiertos</span>
+                </div>
+            </div>
+            <div class="stat-card stat-progress">
+                <div class="stat-icon">🟡</div>
+                <div class="stat-info">
+                    <span class="stat-value" id="statProgress">-</span>
+                    <span class="stat-label">En Progreso</span>
+                </div>
+            </div>
+            <div class="stat-card stat-critical">
+                <div class="stat-icon">🔴</div>
+                <div class="stat-info">
+                    <span class="stat-value" id="statCritical">-</span>
+                    <span class="stat-label">Críticos</span>
+                </div>
+            </div>
+            <div class="stat-card stat-unassigned">
+                <div class="stat-icon">⚠️</div>
+                <div class="stat-info">
+                    <span class="stat-value" id="statUnassigned">-</span>
+                    <span class="stat-label">Sin Asignar</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Crear Ticket - TODOS -->
+    <section class="monitoring-section">
+        <h3>➕ Crear Nuevo Ticket</h3>
+        <div class="monitoring-placeholder">
+            <div class="ticket-form">
+                <div class="form-row">
+                    <div class="form-group form-group-large">
+                        <label for="ticketTitle">Título del Problema *</label>
+                        <input type="text"
+                               id="ticketTitle"
+                               class="form-input"
+                               placeholder="Describa brevemente el problema">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ticketCategory">Categoría</label>
+                        <select id="ticketCategory" class="form-select">
+                            <option value="HARDWARE">🖥️ Hardware</option>
+                            <option value="SOFTWARE">💿 Software</option>
+                            <option value="RED">🌐 Red</option>
+                            <option value="SEGURIDAD">🔒 Seguridad</option>
+                            <option value="OTRO">📎 Otro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ticketPriority">Prioridad</label>
+                        <select id="ticketPriority" class="form-select">
+                            <option value="BAJA">🟢 Baja</option>
+                            <option value="MEDIA" selected>🟡 Media</option>
+                            <option value="ALTA">🟠 Alta</option>
+                            <option value="CRITICA">🔴 Crítica</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="ticketDescription">Descripción Detallada *</label>
+                    <textarea id="ticketDescription"
+                              class="form-textarea"
+                              rows="4"
+                              placeholder="Proporcione todos los detalles relevantes..."></textarea>
+                </div>
+
+                <button onclick="createTicket()" class="btn-create-ticket">
+                    🎫 Crear Ticket
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filtros y Lista de Tickets -->
+    <section class="monitoring-section">
+        <h3>📋 Lista de Tickets</h3>
+        <div class="monitoring-placeholder">
+            <!-- Filtros -->
+            <div class="filters-bar">
+                <div class="filter-group">
+                    <label>Estado:</label>
+                    <select id="filterStatus" onchange="loadTickets()">
+                        <option value="">Todos</option>
+                        <option value="ABIERTO">Abierto</option>
+                        <option value="EN_PROGRESO">En Progreso</option>
+                        <option value="PENDIENTE">Pendiente</option>
+                        <option value="RESUELTO">Resuelto</option>
+                        <option value="CERRADO">Cerrado</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Prioridad:</label>
+                    <select id="filterPriority" onchange="loadTickets()">
+                        <option value="">Todas</option>
+                        <option value="CRITICA">Crítica</option>
+                        <option value="ALTA">Alta</option>
+                        <option value="MEDIA">Media</option>
+                        <option value="BAJA">Baja</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Categoría:</label>
+                    <select id="filterCategory" onchange="loadTickets()">
+                        <option value="">Todas</option>
+                        <option value="HARDWARE">Hardware</option>
+                        <option value="SOFTWARE">Software</option>
+                        <option value="RED">Red</option>
+                        <option value="SEGURIDAD">Seguridad</option>
+                        <option value="OTRO">Otro</option>
+                    </select>
+                </div>
+                <button onclick="loadTickets()" class="btn-refresh">🔄 Actualizar</button>
+            </div>
+
+            <!-- Tabla de Tickets -->
+            <div class="table-container">
+                <table class="tickets-table">
+                    <thead>
+                    <tr>
+                        <th>Ticket</th>
+                        <th>Título</th>
+                        <th>Categoría</th>
+                        <th>Prioridad</th>
+                        <th>Estado</th>
+                        <th>Creado por</th>
+                        <th>Asignado a</th>
+                        <th>Fecha</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody id="ticketsTableBody">
+                    <tr>
+                        <td colspan="9" class="loading">Cargando tickets...</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Modal Ver Ticket -->
+<div id="viewTicketModal" class="modal">
+    <div class="modal-content modal-large">
+        <div class="modal-header">
+            <h3>🎫 Detalles del Ticket</h3>
+            <span class="close" onclick="closeViewModal()">&times;</span>
+        </div>
+        <div class="modal-body" id="ticketDetailBody">
+            <div class="loading">Cargando detalles...</div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Asignar Ticket -->
+<div id="assignModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>👤 Asignar Ticket</h3>
+            <span class="close" onclick="closeAssignModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p>Ticket: <strong id="assignTicketNumber"></strong></p>
+            <div class="form-group">
+                <label for="assignTechnician">Seleccione Técnico:</label>
+                <select id="assignTechnician" class="form-select">
+                    <option value="">Cargando técnicos...</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeAssignModal()" class="btn-secondary">Cancelar</button>
+            <button onclick="confirmAssign()" class="btn-primary">👤 Asignar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Cambiar Estado -->
+<div id="statusModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>📝 Cambiar Estado</h3>
+            <span class="close" onclick="closeStatusModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p>Ticket: <strong id="statusTicketNumber"></strong></p>
+            <div class="form-group">
+                <label for="newStatus">Nuevo Estado:</label>
+                <select id="newStatus" class="form-select">
+                    <option value="ABIERTO">🔵 Abierto</option>
+                    <option value="EN_PROGRESO">🟡 En Progreso</option>
+                    <option value="PENDIENTE">🟠 Pendiente</option>
+                    <option value="RESUELTO">🟢 Resuelto</option>
+                    <option value="CERRADO">⚫ Cerrado</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeStatusModal()" class="btn-secondary">Cancelar</button>
+            <button onclick="confirmStatusChange()" class="btn-primary">✓ Cambiar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Guardar información del usuario -->
+<script th:inline="javascript">
+    const currentUserType = [[${userSession.userType}]];
+    const currentUserEmail = [[${userSession.email}]];
+    const currentUserName = [[${userSession.name}]];
+</script>
+
+<script th:src="@{/tickets.js}"></script>
+
+</body>
+</html>

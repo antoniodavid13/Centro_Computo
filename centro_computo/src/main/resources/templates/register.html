@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!-- Namespace de Thymeleaf es esencial -->
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TecnoSolutions - Registro</title>
+    <!-- Enlace al CSS estático usando la sintaxis de Thymeleaf -->
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<!-- Usamos la misma clase 'login-body' para heredar el fondo y centrado -->
+<body class="login-body">
+    <!-- Usamos la misma clase 'login-box' para heredar el estilo de tarjeta -->
+    <div class="login-box">
+        <div class="logo">
+            <!-- Título adaptado a la estética de la tarjeta -->
+            <h1>🖥️ Registrar Nueva Cuenta</h1>
+            <p>Accede al Centro de Computo</p>
+        </div>
+
+        <!-- Mensaje de Error (si viene del controlador) -->
+        <div class="alert error" th:if="${error}">
+            <span th:text="${error}">El correo electrónico ya está registrado.</span>
+        </div>
+
+        <!-- Mensaje de Éxito (si viene de una redirección) -->
+        <div class="alert success"
+             th:if="${success}"
+             style="background-color: #d4edda; color: #155724; border-color: #c3e6cb;">
+            <span th:text="${success}">Registro exitoso. Por favor, inicie sesión.</span>
+        </div>
+
+        <!-- Formulario con acción y método Thymeleaf -->
+        <form id="registerForm" method="POST" th:action="@{/api/register}">
+            <div class="input-group">
+                <label for="name">Nombre Completo</label>
+                <!-- IMPORTANTE: El 'name' debe coincidir con el @RequestParam de Java -->
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <!-- CAMPO 'TIPO' AÑADIDO PARA RESOLVER EL ERROR 400 -->
+            <div class="input-group">
+                <label for="tipo">Tipo de Usuario</label>
+                <select id="tipo" name="tipo" required>
+                    <option value="" disabled selected>Selecciona un rol</option>
+                    <option value="ADMINISTRADOR">Administrador</option>
+                    <option value="TECNICO">Técnico</option>
+                    <option value="CLIENTE">Cliente</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password" minlength="6" required>
+            </div>
+            <!-- Botón usa la clase de estilo definida en style.css -->
+            <button type="submit" class="btn-primary">Crear Cuenta</button>
+        </form>
+
+        <div class="register-link">
+            <!-- Enlace al login usando la sintaxis de Thymeleaf para mapeo de controlador -->
+            <p>¿Ya tienes cuenta? <a th:href="@{/login}">Inicia sesión</a></p>
+        </div>
+
+</div>
+</body>
+</html>

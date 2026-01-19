@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TecnoSolutions - Dashboard</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <link rel="stylesheet" th:href="@{/dashboard.css}">
+</head>
+<body class="dashboard-body">
+
+<nav class="navbar">
+        <div class="nav-brand">🖥️ Centro Computo</div>
+    <div class="nav-menu">
+        <a th:href="@{/monitoreo}" class="nav-link active">📊 Monitoreo</a>
+        <a th:href="@{/process-management}" class="nav-link">⚙️ Gestión de Procesos</a>
+        <a th:href="@{/backups}" class="nav-link">💾 Backups</a>
+        <a th:href="@{/database}" class="nav-link active">🗄️ Base de Datos</a>
+        <a th:href="@{/tickets}" class="nav-link active"> 🎫Tickets</a>
+        <a th:href="@{/logout}" class="nav-link logout">🚪 Cerrar Sesión</a>
+    </div>
+</nav>
+
+<div class="container dashboard-content">
+    <h2 class="welcome-header" th:text="'Bienvenido, ' + ((${userName} != null) ? ${userName} : 'Usuario') + '.'">Bienvenido, Usuario.</h2>
+
+    <!-- Alertas -->
+    <div id="alertsContainer"></div>
+
+    <!-- Tarjetas de Estadísticas -->
+    <div class="stats-grid">
+        <div class="stat-card cpu">
+            <h3>Uso de CPU</h3>
+            <div class="stat-value" id="cpuValue">--</div>
+            <p class="stat-detail" id="cpuDetail">Cargando...</p>
+        </div>
+        <div class="stat-card memory">
+            <h3>Memoria RAM</h3>
+            <div class="stat-value" id="memoryValue">--</div>
+            <p class="stat-detail" id="memoryDetail">Cargando...</p>
+        </div>
+        <div class="stat-card disk">
+            <h3>Almacenamiento</h3>
+            <div class="stat-value" id="diskValue">--</div>
+            <p class="stat-detail" id="diskDetail">Cargando...</p>
+        </div>
+    </div>
+
+    <!-- Información del Sistema -->
+    <section class="monitoring-section">
+        <h3>Información del Sistema</h3>
+        <div class="monitoring-placeholder">
+            <div id="systemInfo" class="system-info">
+                <div class="loading">Cargando información del sistema...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Procesos Activos -->
+    <section class="monitoring-section">
+        <h3>Procesos del Sistema</h3>
+        <div class="monitoring-placeholder">
+            <div class="table-container">
+                <table class="process-table" id="processTable">
+                    <thead>
+                    <tr>
+                        <th>PID</th>
+                        <th>Nombre</th>
+                        <th>CPU %</th>
+                        <th>Memoria (MB)</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody id="processTableBody">
+                    <tr>
+                        <td colspan="6" class="loading">Cargando procesos...</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interfaces de Red -->
+    <section class="monitoring-section">
+        <h3>Interfaces de Red</h3>
+        <div class="monitoring-placeholder">
+            <div id="networkInfo" class="network-grid">
+                <div class="loading">Cargando información de red...</div>
+            </div>
+
+        </div>
+        <div id="networkPagination" class="pagination-controls" style="display: none;">
+            <button id="prevPage" onclick="changeNetworkPage(-1)">← Anterior</button>
+            <span id="pageInfo" class="pagination-info">Página 1 de 1</span>
+            <button id="nextPage" onclick="changeNetworkPage(1)">Siguiente →</button>
+        </div>
+    </section>
+</div>
+
+<script th:src="@{/dashboard.js}"></script>
+
+</body>
+</html>

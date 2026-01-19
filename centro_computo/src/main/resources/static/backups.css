@@ -1,0 +1,655 @@
+/* Estilos para Sistema de Backups - Diseño Compacto */
+
+.nav-link.active {
+    background: #2980b9;
+    border-radius: 4px;
+}
+
+/* ==================== ALERTAS ==================== */
+
+.alert {
+    padding: 12px 20px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    animation: slideIn 0.3s ease;
+}
+
+.alert-success {
+    background: linear-gradient(135deg, #27ae60, #2ecc71);
+    color: white;
+}
+
+.alert-error {
+    background: linear-gradient(135deg, #c0392b, #e74c3c);
+    color: white;
+}
+
+.alert.fade-out {
+    animation: fadeOut 0.3s ease forwards;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    to {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+}
+
+/* ==================== FORMULARIO DE BACKUP ==================== */
+
+.backup-form {
+    width: 100%;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+.form-group {
+    flex: 1;
+    min-width: 200px;
+    margin-bottom: 0;
+}
+
+.form-group-btn {
+    flex: 0 0 auto;
+}
+
+.form-group label {
+    display: block;
+    color: #e0e0e0;
+    font-weight: 500;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px 15px;
+    background: #2d2d2d;
+    border: 1px solid #3d3d3d;
+    border-radius: 6px;
+    color: #ffffff;
+    font-size: 14px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+.form-input::placeholder {
+    color: #666;
+}
+
+.btn-create-backup {
+    background: linear-gradient(135deg, #27ae60, #2ecc71);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: transform 0.2s, box-shadow 0.2s;
+    white-space: nowrap;
+}
+
+.btn-create-backup:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4);
+}
+
+/* ==================== PROGRESO ==================== */
+
+.backup-progress {
+    margin-top: 20px;
+    padding: 15px;
+    background: #2d2d2d;
+    border-radius: 6px;
+}
+
+.progress-info {
+    color: #e0e0e0;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.progress-bar {
+    height: 6px;
+    background: #1a1a1a;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3498db, #2ecc71);
+    width: 0%;
+    animation: progressAnimation 2s ease-in-out infinite;
+}
+
+@keyframes progressAnimation {
+    0% { width: 0%; }
+    50% { width: 100%; }
+    100% { width: 0%; }
+}
+
+/* ==================== ACCIONES Y CONTADOR ==================== */
+
+.backup-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 30px;
+    gap: 8px;
+}
+
+.backup-count {
+    color: #999;
+    font-size: 13px;
+    margin-left: 4px;
+}
+
+.btn-refresh {
+    background: linear-gradient(135deg, #2980b9, #3498db);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-refresh:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+}
+
+/* ==================== TABLA DE BACKUPS (COMPACTA) ==================== */
+
+.table-container {
+    overflow-x: auto;
+    margin-top: 20px;
+}
+
+.backup-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #1e1e1e;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.backup-table thead {
+    background: #2d2d2d;
+}
+
+.backup-table th {
+    padding: 14px 16px;
+    text-align: left;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #3d3d3d;
+}
+
+.backup-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #2d2d2d;
+    color: #e0e0e0;
+    font-size: 14px;
+}
+
+.backup-table tbody tr {
+    transition: background-color 0.2s;
+}
+
+.backup-table tbody tr:hover {
+    background-color: #2a2a2a;
+}
+
+.backup-row {
+    cursor: default;
+}
+
+/* Celda de nombre con icono */
+.backup-name-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.backup-icon {
+    font-size: 20px;
+}
+
+.backup-name-text {
+    font-weight: 500;
+    color: #ffffff;
+}
+
+/* ==================== BADGES DE ESTADO ==================== */
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status-git {
+    background: linear-gradient(135deg, #27ae60, #2ecc71);
+    color: white;
+}
+
+.status-no-git {
+    background: #7f8c8d;
+    color: white;
+}
+
+.status-success {
+    color: #2ecc71;
+    font-weight: 600;
+}
+
+.status-error {
+    color: #e74c3c;
+    font-weight: 600;
+}
+
+/* ==================== BOTÓN VER DETALLES ==================== */
+
+.btn-details {
+    background: linear-gradient(135deg, #34495e, #4a6278);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-details:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 73, 94, 0.4);
+    background: linear-gradient(135deg, #4a6278, #5d7a94);
+}
+
+/* ==================== MODALES ==================== */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    background-color: #2d2d2d;
+    margin: 5% auto;
+    padding: 0;
+    border: 1px solid #3d3d3d;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    animation: modalSlideIn 0.3s ease;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.modal-details {
+    max-width: 550px;
+}
+
+@keyframes modalSlideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, #2d2d2d, #3d3d3d);
+    border-bottom: 1px solid #4d4d4d;
+    border-radius: 12px 12px 0 0;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: #ffffff;
+    font-size: 18px;
+}
+
+.close {
+    color: #999;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s;
+    line-height: 1;
+}
+
+.close:hover {
+    color: #ffffff;
+}
+
+.modal-body {
+    padding: 24px;
+    color: #e0e0e0;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 16px 24px;
+    background: #252525;
+    border-top: 1px solid #3d3d3d;
+    border-radius: 0 0 12px 12px;
+}
+
+/* ==================== MODAL DE DETALLES ==================== */
+
+.detail-info {
+    background: #252525;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #3d3d3d;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    color: #999;
+    font-size: 14px;
+}
+
+.detail-value {
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 14px;
+    text-align: right;
+    max-width: 60%;
+    word-break: break-all;
+}
+
+/* ==================== BOTONES DE ACCIÓN EN MODAL ==================== */
+
+.detail-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.btn-action {
+    width: 100%;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-action:hover {
+    transform: translateY(-2px);
+}
+
+.btn-verify {
+    background: linear-gradient(135deg, #2980b9, #3498db);
+    color: white;
+}
+
+.btn-verify:hover {
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+}
+
+.btn-restore {
+    background: linear-gradient(135deg, #27ae60, #2ecc71);
+    color: white;
+}
+
+.btn-restore:hover {
+    box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
+}
+
+.btn-delete {
+    background: linear-gradient(135deg, #c0392b, #e74c3c);
+    color: white;
+}
+
+.btn-delete:hover {
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+}
+
+/* ==================== BOTONES GENERALES ==================== */
+
+.btn-primary, .btn-secondary {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #2980b9, #3498db);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+}
+
+.btn-secondary {
+    background: #4a4a4a;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #5a5a5a;
+}
+
+/* ==================== VERIFICACIÓN ==================== */
+
+.verify-result {
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.verify-result.success {
+    background: linear-gradient(135deg, #27ae60, #2ecc71);
+    color: white;
+}
+
+.verify-result.error {
+    background: linear-gradient(135deg, #c0392b, #e74c3c);
+    color: white;
+}
+
+.verify-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.verify-result strong {
+    display: block;
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.verify-result p {
+    margin: 0;
+    opacity: 0.9;
+}
+
+.verify-details {
+    background: #1a1a1a;
+    padding: 12px;
+    border-radius: 6px;
+    margin-top: 15px;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.verify-details pre {
+    margin: 0;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 12px;
+    color: #aaa;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+/* ==================== TABLA DE HISTORIAL ==================== */
+
+.log-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #1e1e1e;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.log-table thead {
+    background: #2d2d2d;
+}
+
+.log-table th {
+    padding: 12px 14px;
+    text-align: left;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #3d3d3d;
+}
+
+.log-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #2d2d2d;
+    color: #e0e0e0;
+    font-size: 13px;
+}
+
+.log-table tbody tr:hover {
+    background-color: #2a2a2a;
+}
+
+/* ==================== LOADING ==================== */
+
+.loading {
+    text-align: center;
+    padding: 30px;
+    color: #999;
+    font-style: italic;
+}
+
+/* ==================== FORM HINT ==================== */
+
+.form-hint {
+    display: block;
+    color: #999;
+    font-size: 12px;
+    margin-top: 6px;
+}
+
+/* ==================== RESPONSIVE ==================== */
+
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+    }
+
+    .form-group {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .form-group-btn {
+        width: 100%;
+    }
+
+    .btn-create-backup {
+        width: 100%;
+    }
+
+    .backup-table th,
+    .backup-table td {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+
+    .backup-name-cell {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .modal-content {
+        margin: 10% auto;
+        width: 95%;
+    }
+}

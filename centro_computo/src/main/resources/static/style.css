@@ -1,0 +1,335 @@
+/* -------------------------------------------------------------------------- */
+/* ESTILOS GLOBALES / BASE                           */
+/* -------------------------------------------------------------------------- */
+:root {
+    --primary-color: #007bff; /* Azul vibrante */
+    --secondary-color: #6c757d; /* Gris */
+    --background-light: #f8f9fa; /* Fondo claro */
+    --surface-light: #ffffff; /* Superficie de tarjetas/cajas */
+    --text-dark: #212529; /* Texto oscuro */
+    --border-radius: 8px;
+    --box-shadow-light: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+html {
+    height: 100%; /* Asegura que HTML ocupa toda la altura de la vista */
+}
+
+body {
+    min-height: 100vh;
+    color: var(--text-dark);
+    background-color: var(--background-light);
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 20px;
+    margin: 0 auto;
+}
+
+/* -------------------------------------------------------------------------- */
+/* ESTILOS DE LOGIN/REGISTER                       */
+/* -------------------------------------------------------------------------- */
+.login-body {
+    display: flex;
+    justify-content: center; /* Centrado horizontal */
+    align-items: center; /* Centrado vertical */
+    min-height: 100vh; /* CRÍTICO: Asegura que ocupe toda la altura de la ventana para centrar el contenido */
+    background-color: #e9ecef; /* Un gris muy claro para el fondo */
+}
+
+.login-box {
+    background-color: var(--surface-light);
+    padding: 35px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow-light);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.logo h1 {
+    color: var(--primary-color);
+    margin-bottom: 5px;
+    font-size: 1.8rem;
+}
+
+.logo p {
+    color: var(--secondary-color);
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+}
+
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.input-group input,
+.input-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: var(--border-radius);
+    transition: border-color 0.2s;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-primary:active {
+    transform: translateY(1px);
+}
+
+.register-link p {
+    margin-top: 20px;
+    font-size: 0.9rem;
+}
+
+.register-link a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* Mensajes de Alerta */
+.alert {
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    border-radius: var(--border-radius);
+    font-size: 0.9rem;
+    text-align: center;
+    font-weight: 500;
+}
+
+.alert.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.alert.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+/* -------------------------------------------------------------------------- */
+/* ESTILOS DE DASHBOARD                              */
+/* -------------------------------------------------------------------------- */
+
+/* Estilo para el cuerpo del dashboard (sin centrado vertical) */
+.dashboard-body {
+    background-color: var(--background-light);
+    display: block; /* Vuelve a flujo normal */
+}
+
+/* Barra de Navegación */
+.navbar {
+    background-color: var(--surface-light);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.nav-brand {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.nav-menu .nav-link {
+    color: var(--text-dark);
+    text-decoration: none;
+    margin-left: 20px;
+    padding: 5px 0;
+    transition: color 0.2s;
+    font-weight: 500;
+}
+
+.nav-menu .nav-link:hover {
+    color: var(--primary-color);
+}
+
+.nav-menu .logout {
+    color: #dc3545;
+}
+
+/* Contenido Principal y Bienvenida */
+.dashboard-content {
+    padding-top: 0;
+}
+
+.welcome-header {
+    margin-bottom: 25px;
+    font-weight: 300;
+    font-size: 2rem;
+    color: var(--text-dark);
+}
+
+/* -------------------------------------------------------------------------- */
+/* GRID DE ESTADÍSTICAS - CENTRADO                   */
+/* -------------------------------------------------------------------------- */
+.stats-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Centra las tarjetas horizontalmente */
+    align-items: stretch;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+/* Tarjeta de Estadística (Similares a .login-box) */
+.stat-card {
+    background-color: var(--surface-light);
+    padding: 25px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow-light);
+    transition: transform 0.3s;
+    border-left: 5px solid transparent; /* Para el color distintivo */
+    min-width: 200px;
+    max-width: 280px;
+    flex: 1 1 200px; /* Crece y se encoge, base de 200px */
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+}
+
+.stat-card h3 {
+    font-size: 1rem;
+    color: var(--secondary-color);
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.stat-value {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.stat-detail {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+/* Colores Distintivos para las Tarjetas */
+.stat-card.cpu { border-left-color: #28a745; } /* Verde */
+.stat-card.memory { border-left-color: #ffc107; } /* Amarillo */
+.stat-card.disk { border-left-color: #dc3545; } /* Rojo */
+.stat-card.tickets { border-left-color: var(--primary-color); } /* Azul */
+
+/* -------------------------------------------------------------------------- */
+/* SECCIÓN DE MONITOREO                              */
+/* -------------------------------------------------------------------------- */
+.monitoring-section {
+    background-color: var(--surface-light);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow-light);
+    margin-bottom: 25px;
+}
+
+.monitoring-section h3 {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.monitoring-placeholder {
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    background-color: #f8f9fa;
+    border-radius: var(--border-radius);
+    padding: 20px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* RESPONSIVE DESIGN                               */
+/* -------------------------------------------------------------------------- */
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px 20px;
+    }
+
+    .nav-menu {
+        margin-top: 10px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .nav-menu .nav-link {
+        margin: 5px 0;
+        padding: 8px 0;
+        width: 100%;
+        border-bottom: 1px solid #eee;
+    }
+
+    .nav-menu .nav-link:last-child {
+        border-bottom: none;
+    }
+
+    .stats-grid {
+        justify-content: center; /* Mantiene centrado en móvil */
+    }
+
+    .stat-card {
+        min-width: 100%;
+        max-width: 100%;
+    }
+
+    .login-box {
+        padding: 25px;
+        margin: 20px;
+    }
+
+    .welcome-header {
+        font-size: 1.5rem;
+    }
+}

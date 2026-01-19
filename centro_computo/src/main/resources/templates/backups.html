@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Backups - TecnoSolutions</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <link rel="stylesheet" th:href="@{/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/backups.css}">
+</head>
+<body class="dashboard-body">
+
+<nav class="navbar">
+    <div class="nav-brand">🖥️ TecnoSolutions</div>
+    <div class="nav-menu">
+        <a th:href="@{/monitoreo}" class="nav-link">📊 Monitoreo</a>
+        <a th:href="@{/process-management}" class="nav-link">⚙️ Gestión de Procesos</a>
+        <a th:href="@{/backups}" class="nav-link">💾 Backups</a>
+        <a th:href="@{/database}" class="nav-link active">🗄️ Base de Datos</a>
+        <a th:href="@{/tickets}" class="nav-link">🎫 Tickets</a>
+        <a th:href="@{/logout}" class="nav-link logout">🚪 Cerrar Sesión</a>
+    </div>
+</nav>
+
+<div class="container dashboard-content">
+    <h2 class="welcome-header">Sistema de Backup Automatizado</h2>
+
+    <!-- Alertas -->
+    <div id="alertsContainer"></div>
+
+    <!-- Crear Backup - SOLO ADMIN -->
+    <section class="monitoring-section" th:if="${userSession.isAdmin()}">
+        <h3>💾 Crear Nuevo Backup</h3>
+        <div class="monitoring-placeholder">
+            <div class="backup-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="backupName">Nombre del Backup</label>
+                        <input type="text"
+                               id="backupName"
+                               class="form-input"
+                               placeholder="ej: Documentos_Importantes">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sourcePath">Ruta del Directorio a Respaldar</label>
+                        <input type="text"
+                               id="sourcePath"
+                               class="form-input"
+                               placeholder="ej: C:\Users\Usuario\Documents">
+                    </div>
+
+                    <div class="form-group form-group-btn">
+                        <button onclick="createBackup()" class="btn-create-backup">
+                            💾 Crear Backup
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progreso -->
+            <div id="backupProgress" class="backup-progress" style="display: none;">
+                <div class="progress-info">
+                    <span>Creando backup...</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lista de Backups - TODOS -->
+    <section class="monitoring-section">
+        <h3>📦 Backups Disponibles</h3>
+        <div class="monitoring-placeholder">
+            <div class="backup-actions">
+                <button onclick="loadBackups()" class="btn-refresh">🔄 Actualizar</button>
+                <span id="backupCount" class="backup-count">Cargando...</span>
+            </div>
+
+            <!-- Tabla de Backups (diseño compacto) -->
+            <div class="table-container">
+                <table class="backup-table">
+                    <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Tamaño</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody id="backupsTableBody">
+                    <tr>
+                        <td colspan="5" class="loading">Cargando backups...</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Historial de Backups - ADMIN y TECNICO -->
+    <section class="monitoring-section" th:if="${userSession.isAdmin() or userSession.isTechnician()}">
+        <h3>📋 Historial de Operaciones</h3>
+        <div class="monitoring-placeholder">
+            <div class="table-container">
+                <table class="log-table">
+                    <thead>
+                    <tr>
+                        <th>Fecha/Hora</th>
+                        <th>Nombre</th>
+                        <th>Origen</th>
+                        <th>Usuario</th>
+                        <th>Tamaño</th>
+                        <th>Estado</th>
+                    </tr>
+                    </thead>
+                    <tbody id="historyTableBody">
+                    <tr>
+                        <td colspan="6" class="loading">Cargando historial...</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Modal de Detalles del Backup -->
+<div id="detailsModal" class="modal">
+    <div class="modal-content modal-details">
+        <div class="modal-header">
+            <h3>📋 Detalles del Backup</h3>
+            <span class="close" onclick="closeDetailsModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="detail-info">
+                <div class="detail-row">
+                    <span class="detail-label">Nombre:</span>
+                    <span id="detailName" class="detail-value"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Tamaño:</span>
+                    <span id="detailSize" class="detail-value"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Fecha:</span>
+                    <span id="detailDate" class="detail-value"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Ruta:</span>
+                    <span id="detailPath" class="detail-value"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Estado:</span>
+                    <span id="detailStatus" class="detail-value"></span>
+                </div>
+            </div>
+
+            <div class="detail-actions">
+                <button onclick="verifyFromDetails()" class="btn-action btn-verify">
+                    🔍 Verificar Integridad
+                </button>
+                <button onclick="restoreFromDetails()" class="btn-action btn-restore">
+                    ♻️ Restaurar Backup
+                </button>
+                <button onclick="deleteFromDetails()" class="btn-action btn-delete">
+                    🗑️ Eliminar Backup
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Restaurar Backup -->
+<div id="restoreModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>♻️ Restaurar Backup</h3>
+            <span class="close" onclick="closeRestoreModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p>Nombre del backup: <strong id="restoreBackupName"></strong></p>
+
+            <div class="form-group">
+                <label for="targetPath">Ruta de Destino</label>
+                <input type="text"
+                       id="targetPath"
+                       class="form-input"
+                       placeholder="ej: C:\Users\Usuario\Restaurados">
+                <small class="form-hint">⚠️ Los archivos existentes serán sobrescritos</small>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeRestoreModal()" class="btn-secondary">Cancelar</button>
+            <button onclick="confirmRestore()" class="btn-primary">♻️ Restaurar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Verificar Backup -->
+<div id="verifyModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>🔍 Verificación de Integridad</h3>
+            <span class="close" onclick="closeVerifyModal()">&times;</span>
+        </div>
+        <div id="verifyModalBody" class="modal-body">
+            <div class="loading">Verificando integridad...</div>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeVerifyModal()" class="btn-secondary">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/backups.js}"></script>
+
+</body>
+</html>

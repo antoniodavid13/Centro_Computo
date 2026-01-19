@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Procesos - TecnoSolutions</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <link rel="stylesheet" th:href="@{/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/process-management.css}">
+</head>
+<body class="dashboard-body">
+
+<nav class="navbar">
+    <div class="nav-brand">🖥️ Centro Computo</div>
+    <div class="nav-menu">
+        <a th:href="@{/monitoreo}" class="nav-link active">📊 Monitoreo</a>
+        <a th:href="@{/process-management}" class="nav-link">⚙️ Gestión de Procesos</a>
+        <a th:href="@{/backups}" class="nav-link">💾 Backups</a>
+        <a th:href="@{/database}" class="nav-link active">🗄️ Base de Datos</a>
+        <a th:href="@{/tickets}" class="nav-link active"> 🎫Tickets</a>
+        <a th:href="@{/logout}" class="nav-link logout">🚪 Cerrar Sesión</a>
+    </div>
+</nav>
+
+<div class="container dashboard-content">
+    <h2 class="welcome-header">Gestión de Procesos del Sistema</h2>
+
+    <!-- Mensaje para CLIENTES -->
+    <div th:if="${userSession.isClient()}" class="alert-info-client">
+        <strong>👁️ Modo Solo Lectura:</strong> Como cliente, solo puedes ver el log de comandos ejecutados.
+        No puedes ejecutar, buscar o terminar procesos.
+    </div>
+
+    <!-- Ejecutar Comando - ADMIN y TECNICO -->
+    <section class="monitoring-section" th:if="${userSession.canExecuteCommands()}">
+        <h3>🚀 Ejecutar Comando</h3>
+        <div id="commandOutput" class="command-output" style="display: none;">
+            <div class="output-header">
+                <span>Salida del Comando</span>
+                <button onclick="clearOutput()" class="btn-clear">Limpiar</button>
+            </div>
+            <pre id="outputContent"></pre>
+        </div>
+        <div class="monitoring-placeholder">
+            <div class="command-input-section">
+                <input type="text"
+                       id="commandInput"
+                       class="command-input"
+                       placeholder="Ingrese un comando (ej: notepad, calc, ipconfig)"
+                       onkeypress="if(event.key==='Enter') executeCommand()">
+                <button onclick="executeCommand()" class="btn-execute">Ejecutar</button>
+            </div>
+
+
+        </div>
+    </section>
+
+    <!-- Buscar Procesos - SOLO ADMIN -->
+    <section class="monitoring-section" th:if="${userSession.isAdmin()}">
+        <h3>🔍 Buscar y Gestionar Procesos</h3>
+        <div class="monitoring-placeholder">
+            <div class="search-section">
+                <input type="text"
+                       id="searchInput"
+                       class="search-input"
+                       placeholder="Buscar proceso por nombre..."
+                       onkeyup="searchProcesses()">
+            </div>
+
+            <div id="searchResults" class="search-results">
+                <p class="info-text">Ingrese un término de búsqueda para encontrar procesos</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mensaje para TÉCNICOS -->
+    <section class="monitoring-section" th:if="${userSession.isTechnician()}">
+        <div class="monitoring-placeholder">
+            <div class="info-message">
+                <strong>ℹ️ Información:</strong> Como técnico, puedes ejecutar comandos pero no buscar o terminar procesos.
+                Solo los administradores tienen estos permisos.
+            </div>
+        </div>
+    </section>
+
+    <!-- Log de Comandos - TODOS pueden ver -->
+    <section class="monitoring-section">
+        <h3>📋 Log de Comandos Ejecutados</h3>
+        <div class="table-container">
+            <table class="log-table">
+                <thead>
+                <tr>
+                    <th>Fecha/Hora</th>
+                    <th>Usuario</th>
+                    <th>Comando</th>
+                    <th>Estado</th>
+                    <th>Salida</th>
+                    <th th:if="${userSession.isAdmin()}">Acciones</th>
+                </tr>
+                </thead>
+                <tbody id="logTableBody">
+                <tr>
+                    <td th:colspan="${userSession.isAdmin()} ? 6 : 5" class="loading">Cargando log...</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="monitoring-placeholder">
+
+            <br>
+            <div class="log-header" th:if="${userSession.isAdmin()}">
+                <button onclick="loadCommandLog()" class="btn-refresh">🔄 Actualizar</button>
+                <button onclick="clearCommandLog()" class="btn-clear">🗑️ Limpiar Log</button>
+            </div>
+
+            <div class="log-header" th:if="${!userSession.isAdmin()}">
+                <button onclick="loadCommandLog()" class="btn-refresh">🔄 Actualizar</button>
+            </div>
+
+
+            <div id="processModal" class="modal">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Detalles del Proceso</h3>
+                        <span class="close" onclick="closeModal()">&times;</span>
+                    </div>
+                    <div id="modalBody" class="modal-body">
+                        <!-- Se llenará dinámicamente -->
+                    </div>
+                    <div class="modal-footer">
+                        <button onclick="closeModal()" class="btn-secondary">Cerrar</button>
+                        <button id="killProcessBtn" onclick="confirmKillProcess()" class="btn-danger">Terminar Proceso</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Modal de detalles de proceso -->
+
+
+<script th:src="@{/process-management.js}"></script>
+
+</body>
+</html>

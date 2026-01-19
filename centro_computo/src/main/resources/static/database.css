@@ -1,0 +1,386 @@
+/* Estilos para Gestión de Base de Datos - Tema Claro/Azul */
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.section-header h3 {
+    margin: 0;
+    color: #3498db; /* Azul para títulos de sección (como en dashboard) */
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Botón de recarga (REFRESH) - Mantiene el color azul primario */
+.btn-refresh {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+}
+
+.btn-refresh:hover {
+    background: #2980b9;
+}
+
+.last-update {
+    color: #555555; /* Texto más suave (como en dashboard) */
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+/* Grid de estadísticas - Diseño horizontal compacto */
+.stats-grid-db {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+/* Tarjetas de estadísticas - Fondo blanco y borde gris claro (como en dashboard) */
+.stat-card-db {
+    display: flex;
+    align-items: center;
+    background: #ffffff; /* Fondo blanco */
+    border: 1px solid #cccccc; /* Borde gris claro */
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Sombra para levantarlo */
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card-db:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    background: #f5f5f5; /* Fondo gris claro al pasar el ratón */
+}
+
+.stat-icon {
+    font-size: 32px;
+    margin-right: 15px;
+    flex-shrink: 0;
+    color: #3498db; /* Icono en color azul */
+}
+
+.stat-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.stat-label {
+    color: #555555; /* Texto suave (como stat-detail) */
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.stat-value {
+    color: #333333; /* Texto oscuro (como en dashboard) */
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 3px;
+    line-height: 1;
+}
+
+.stat-detail {
+    color: #555555; /* Texto suave */
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Editor de consultas - Tema de código claro (como en process-table) */
+.query-editor {
+    background: #ffffff; /* Fondo blanco */
+    border: 1px solid #cccccc; /* Borde gris claro */
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.editor-toolbar {
+    display: flex;
+    gap: 10px;
+    padding: 12px 15px;
+    background: #e6f0ff; /* Fondo azul muy claro (como thead de tabla) */
+    border-bottom: 1px solid #cccccc;
+    flex-wrap: wrap;
+}
+
+/* Selector de formulario */
+.form-select {
+    padding: 8px 12px;
+    background: #ffffff;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    color: #333333;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.form-select:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+/* Botón de Ejecución (VERDE) */
+.btn-execute-query {
+    background: #2ecc71; /* Verde (como tickets en dashboard) */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background-color 0.2s;
+}
+
+.btn-execute-query:hover {
+    background: #27ae60;
+}
+
+/* Botón de Borrar (GRIS/PLATA) */
+.btn-clear-query {
+    background: #95a5a6; /* Gris/Plata */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background-color 0.2s;
+}
+
+.btn-clear-query:hover {
+    background: #7f8c8d;
+}
+
+/* Área de código */
+.sql-editor {
+    width: 100%;
+    min-height: 180px;
+    padding: 15px;
+    background: #ffffff; /* Fondo blanco */
+    border: none;
+    color: #333333; /* Texto oscuro */
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    resize: vertical;
+}
+
+.sql-editor:focus {
+    outline: none;
+}
+
+/* Resultados */
+.query-results {
+    border-top: 1px solid #cccccc;
+}
+
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    background: #e6f0ff; /* Azul muy claro */
+    border-bottom: 1px solid #cccccc;
+}
+
+.results-header span:first-child {
+    color: #333333;
+    font-weight: 500;
+}
+
+.results-info {
+    color: #27ae60; /* Verde de éxito */
+    font-size: 13px;
+}
+
+.results-info.error {
+    color: #e74c3c; /* Rojo de error */
+}
+
+.results-content {
+    padding: 15px;
+    max-height: 400px;
+    overflow: auto;
+    background: #f0f0f0; /* Fondo gris claro */
+}
+
+/* Tabla de Resultados - Mismo estilo que process-table de dashboard */
+.results-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    background: #ffffff; /* Fondo blanco */
+}
+
+.results-table th {
+    background: #e6f0ff; /* Azul muy claro */
+    color: #3498db; /* Azul oscuro para encabezados */
+    padding: 10px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid #cccccc;
+    position: sticky;
+    top: 0;
+}
+
+.results-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eeeeee; /* Líneas divisorias muy suaves */
+    color: #333333; /* Texto oscuro */
+}
+
+.results-table tbody tr:hover {
+    background: #f5f5f5; /* Gris claro al pasar el ratón */
+}
+
+.results-error {
+    color: #e74c3c;
+    padding: 20px;
+    background: rgba(231, 76, 60, 0.05); /* Fondo muy suave de error */
+    border-radius: 4px;
+}
+
+.results-success {
+    color: #27ae60;
+    padding: 20px;
+    background: rgba(39, 174, 96, 0.05); /* Fondo muy suave de éxito */
+    border-radius: 4px;
+}
+
+/* Respaldo de estructura - Formulario */
+.backup-structure-form {
+    max-width: 100%;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border: 1px solid #cccccc;
+}
+
+.form-row-horizontal {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 15px;
+    align-items: end;
+}
+
+.form-group label {
+    color: #333333;
+    font-weight: 500;
+    margin-bottom: 8px;
+    font-size: 13px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px 12px;
+    background: #ffffff;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    color: #333333;
+    font-size: 14px;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+/* Botón de Backup (AZUL PRIMARIO) */
+.btn-backup-structure {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+    width: 100%;
+    white-space: nowrap;
+}
+
+.btn-backup-structure:hover {
+    background: #2980b9;
+}
+
+/* Tabla de conexiones (LOGS) */
+.table-container {
+    overflow-x: auto;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.log-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff; /* Fondo blanco */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 13px;
+    color: #333333; /* Texto oscuro */
+    min-width: 600px;
+}
+
+.log-table thead {
+    background: #e6f0ff; /* Azul muy claro */
+}
+
+.log-table th {
+    padding: 10px;
+    text-align: left;
+    color: #3498db; /* Azul para encabezados */
+    font-weight: 600;
+    border-bottom: 1px solid #cccccc;
+    white-space: nowrap;
+}
+
+.log-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eeeeee; /* Líneas divisorias muy suaves */
+    color: #333333;
+}
+
+.log-table tbody tr:hover {
+    background-color: #f5f5f5;
+}
+
+.loading {
+    text-align: center;
+    padding: 30px;
+    color: #777777;
+    font-style: italic;
+}
+
+/* Responsive (Ajustes de color ya aplicados, mantienen la estructura) */
+@media (max-width: 1200px) {
+    .stats-grid-db {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    /* ... (resto del responsive) ... */
+}

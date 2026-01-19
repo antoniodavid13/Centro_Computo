@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Base de Datos - TecnoSolutions</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <link rel="stylesheet" th:href="@{/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/database.css}">
+</head>
+<body class="dashboard-body">
+
+<nav class="navbar">
+    <div class="nav-brand">🖥️ Centro Computo</div>
+    <div class="nav-menu">
+        <a th:href="@{/monitoreo}" class="nav-link active">📊 Monitoreo</a>
+        <a th:href="@{/process-management}" class="nav-link">⚙️ Gestión de Procesos</a>
+        <a th:href="@{/backups}" class="nav-link">💾 Backups</a>
+        <a th:href="@{/database}" class="nav-link active">🗄️ Base de Datos</a>
+        <a th:href="@{/tickets}" class="nav-link active"> 🎫Tickets</a>
+        <a th:href="@{/logout}" class="nav-link logout">🚪 Cerrar Sesión</a>
+    </div>
+</nav>
+
+<div class="container dashboard-content">
+    <h2 class="welcome-header">Gestión de Base de Datos</h2>
+
+    <!-- Alertas -->
+    <div id="alertsContainer"></div>
+
+    <!-- Estadísticas de Rendimiento -->
+    <section class="monitoring-section">
+        <div class="section-header">
+            <h3>📊 Estadísticas de Rendimiento</h3>
+            <div class="header-actions">
+                <button onclick="loadStatistics()" class="btn-refresh">🔄 Actualizar</button>
+                <span id="lastUpdate" class="last-update">Última actualización: --</span>
+            </div>
+        </div>
+        <div class="monitoring-placeholder">
+            <div class="stats-grid-db">
+                <div class="stat-card-db">
+                    <div class="stat-icon">🔌</div>
+                    <div class="stat-info">
+                        <div class="stat-label">Conexiones Activas</div>
+                        <div class="stat-value" id="activeConnections">--</div>
+                        <div class="stat-detail" id="maxConnections">de --</div>
+                    </div>
+                </div>
+
+                <div class="stat-card-db">
+                    <div class="stat-icon">⚡</div>
+                    <div class="stat-info">
+                        <div class="stat-label">Consultas/Segundo</div>
+                        <div class="stat-value" id="queriesPerSecond">--</div>
+                        <div class="stat-detail" id="slowQueries">-- lentas</div>
+                    </div>
+                </div>
+
+                <div class="stat-card-db">
+                    <div class="stat-icon">💾</div>
+                    <div class="stat-info">
+                        <div class="stat-label">Tamaño de BD</div>
+                        <div class="stat-value" id="databaseSize">--</div>
+                        <div class="stat-detail" id="tableCount">-- tablas</div>
+                    </div>
+                </div>
+
+                <div class="stat-card-db">
+                    <div class="stat-icon">📈</div>
+                    <div class="stat-info">
+                        <div class="stat-label">Cache Hit Ratio</div>
+                        <div class="stat-value" id="cacheHitRatio">--</div>
+                        <div class="stat-detail">Eficiencia</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Conexiones Activas -->
+    <section class="monitoring-section" th:if="${userSession.isAdmin() or userSession.isTechnician()}">
+        <h3>🔌 Conexiones Activas</h3>
+        <div class="monitoring-placeholder">
+            <div class="table-container">
+                <table class="log-table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Usuario</th>
+                        <th>Host</th>
+                        <th>Base de Datos</th>
+                        <th>Comando</th>
+                        <th>Tiempo (s)</th>
+                        <th>Estado</th>
+                    </tr>
+                    </thead>
+                    <tbody id="connectionsTableBody">
+                    <tr>
+                        <td colspan="7" class="loading">Cargando conexiones...</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Editor de Consultas SQL - SOLO ADMIN -->
+    <section class="monitoring-section" th:if="${userSession.isAdmin()}">
+        <h3>💻 Editor de Consultas SQL</h3>
+        <div class="monitoring-placeholder">
+            <div class="query-editor">
+                <div class="editor-toolbar">
+                    <select id="queryTimeout" class="form-select">
+                        <option value="10">Timeout: 10s</option>
+                        <option value="30" selected>Timeout: 30s</option>
+                        <option value="60">Timeout: 60s</option>
+                        <option value="120">Timeout: 120s</option>
+                    </select>
+                    <button onclick="executeQuery()" class="btn-execute-query">▶️ Ejecutar</button>
+                    <button onclick="clearQueryEditor()" class="btn-clear-query">🗑️ Limpiar</button>
+                </div>
+
+                <textarea id="queryEditor"
+                          class="sql-editor"
+                          placeholder="Escribe tu consulta SQL aquí...&#10;Ejemplo: SELECT * FROM usuarios LIMIT 10;"></textarea>
+
+                <div id="queryResults" class="query-results" style="display: none;">
+                    <div class="results-header">
+                        <span id="resultsTitle">Resultados</span>
+                        <span id="resultsInfo" class="results-info"></span>
+                    </div>
+                    <div id="resultsContent" class="results-content"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Respaldo de Estructura - SOLO ADMIN -->
+    <section class="monitoring-section" th:if="${userSession.isAdmin()}">
+        <h3>📦 Respaldo de Estructura de Base de Datos</h3>
+        <div class="monitoring-placeholder">
+            <div class="backup-structure-form">
+                <div class="form-row-horizontal">
+                    <div class="form-group">
+                        <label for="dbName">Nombre de la Base de Datos</label>
+                        <input type="text"
+                               id="dbName"
+                               class="form-input"
+                               placeholder="ej: centro_computo"
+                               value="centro_computo">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="structureBackupName">Nombre del Respaldo</label>
+                        <input type="text"
+                               id="structureBackupName"
+                               class="form-input"
+                               placeholder="ej: Estructura_DB_2024">
+                    </div>
+
+                    <div class="form-group form-group-button">
+                        <label>&nbsp;</label>
+                        <button onclick="createStructureBackup()" class="btn-backup-structure">
+                            💾 Crear Respaldo
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script th:src="@{/database.js}"></script>
+
+</body>
+</html>
